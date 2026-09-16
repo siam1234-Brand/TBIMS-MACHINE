@@ -2,7 +2,7 @@
 #  Cognitive Recovery SPEED Prediction after Traumatic Brain Injury
 #  TBIMS National Database public release  --  Form1.csv ONLY
 #  Outcome : time from injury to emergence from Post-Traumatic Amnesia (PTA)
-#            = a TIME-TO-EVENT outcome with 18% right-censoring
+#            = a TIME-TO-EVENT outcome with 20.5% right-censoring
 # =============================================================================
 
 # %% CELL 1 --- Install & imports ---------------------------------------------
@@ -72,6 +72,9 @@ d["sci"] = num("SCI")
 d["days_to_acute"] = num("DAYStoACUTEadm", [9999])
 d["days_to_rehab"] = num("DAYStoREHABadm", [9999])
 d["rehab_dc_day"]  = num("DAYStoREHABdc",  [9999])
+# Rehab length of stay. Descriptive / LOS-decomposition use ONLY --
+# it is measured at discharge and is never a predictor (see FEATURES).
+d["rehab_los"]     = d["rehab_dc_day"] - d["days_to_rehab"]
 
 # function at REHAB ADMISSION only (discharge values would leak the outcome)
 for s, t in [("FIMTOTA","fim_tot_adm"), ("FIMMOTA","fim_mot_adm"),
@@ -148,7 +151,8 @@ cens_clf = HistGradientBoostingClassifier(random_state=SEED).fit(Xtr, 1 - y_even
 p_cens_te = cens_clf.predict_proba(Xte)[:, 1]
 auc_c = roc_auc_score(1 - y_event[idx_te], p_cens_te)
 print(f"\nAUC for predicting censoring (held-out test): {auc_c:.3f}")
-print("-> censoring is strongly predictable from admission data: NOT random (MNAR)")
+print("-> censoring is strongly covariate-dependent (C not independent of X).")
+print("   This is NOT a claim of MNAR: C dep. T | X is not identifiable here.")
 
 
 # %% CELL 8 --- FEATURE IMPORTANCE / SELECTION (4 independent methods) --------
@@ -270,7 +274,7 @@ for name, mdl in MODELS.items():
         continue
     try:
         fns = mdl.predict_survival_function(XteT)
-        P = np.row_stack([[fn(t) for t in grid] for fn in fns])
+        P = np.vstack([[fn(t) for t in grid] for fn in fns])
         ibs_rows.append({"Model": name,
                          "IBS": integrated_brier_score(ytr, yte, P, grid)})
     except Exception as e:
