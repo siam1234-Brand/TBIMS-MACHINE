@@ -58,12 +58,14 @@ code/
   fig3panel.py, fig_diag.py  Publication figures
 results/                     Aggregate results only (safe to share)
 figures/                     Figures used in the paper
+requirements.txt             Pinned, verified dependency set
+.gitignore                   Blocks participant-level data from being committed
 ```
 
 ## Running it
 
 ```bash
-pip install lifelines scikit-survival shap xgboost
+pip install -r requirements.txt
 # place Form1.csv in the working directory, then:
 jupyter notebook code/TBIMS_complete.ipynb     # Runtime ≈ 60–75 min
 ```

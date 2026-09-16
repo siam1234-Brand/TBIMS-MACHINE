@@ -1,0 +1,17 @@
+# Verified working set (all reported numbers reproduced with these):
+#   numpy 2.4.4 | pandas 2.3.3 | scikit-learn 1.9.1 | scikit-survival 0.28.0
+#   lifelines 0.30.3 | xgboost 3.4.1 | shap 0.52.0 | scipy 1.17.1
+#
+# Install:  pip install -r requirements.txt
+# scikit-survival needs a C/C++ toolchain on some platforms; if the wheel fails,
+# install it first on its own:  pip install scikit-survival
+
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+scikit-learn>=1.3
+scikit-survival>=0.22
+lifelines>=0.27
+xgboost>=2.0
+shap>=0.44
+matplotlib>=3.7
