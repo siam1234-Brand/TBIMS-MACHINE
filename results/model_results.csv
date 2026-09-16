@@ -1,0 +1,4 @@
+Model,CV C-index,CV SD,Train C,Test C,Overfit gap
+Coxnet (elastic-net),0.845,0.004,0.843,0.846,-0.002
+Random Survival Forest,0.819,0.006,0.827,0.818,0.008
+XGBoost (Cox),0.858,0.004,0.862,0.857,0.005

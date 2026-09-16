@@ -1,0 +1,4 @@
+Model,Test C (full),Test C (no timeline)
+Coxnet (elastic-net),0.846,0.774
+Random Survival Forest,0.818,0.771
+XGBoost (Cox),0.857,0.783
