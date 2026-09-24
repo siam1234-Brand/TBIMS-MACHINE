@@ -39,9 +39,9 @@ performance is about *recovery*, and how much is about *when the episode ends*?
 **Headline result.** A model predicting rehabilitation length of stay from the
 identical feature set already reaches C = 0.793 for PTA emergence; the survival
 model reaches 0.857. The increment attributable to modelling emergence rather
-than discharge timing is **0.064** (95% range 0.061–0.068 over 20 splits).
-Roughly three quarters of concordance over chance is shared with discharge
-timing.
+than discharge timing is **0.064** (95% range 0.061–0.068 over 20 splits), a
+bound rather than a decomposition. About four fifths (82%) of concordance over
+chance is shared with discharge timing.
 
 ---
 
@@ -84,15 +84,34 @@ The slowest steps are cell 9 (random survival forest) and cells 16 and 20
 | Analytic sample | 17,895 (14,231 emerged / 3,664 censored = 20.5%) |
 | LOS model alone, as a risk score for PTA emergence | C = 0.793 [0.789, 0.797] |
 | PTA survival model | C = 0.857 [0.854, 0.860] |
-| **Increment (emergence-specific)** | **0.064 [0.061, 0.068]**, p < 10⁻²⁹ |
-| Conditioned on predicted LOS (quintiles / deciles) | 0.762 / 0.751 |
+| **Increment (a bound, not a decomposition)** | **0.064 [0.061, 0.068]**, corrected p = 2.2×10⁻²² |
+| Conditioned on predicted LOS (quintiles / deciles) | 0.761 / 0.751 (stay score itself: 0.595 / 0.553) |
 | Censoring predictable from admission data | AUC = 0.866 |
-| Median PTA: naive / KM / IPCW / covariate-adjusted | 19 / 26 / **23** / **24** days |
-| XGBoost-Cox vs tuned classical Cox (20 splits) | 0.857 vs 0.845, +0.0121, p < 10⁻²⁰ |
+| Median PTA: naive / KM / IPCW (self-normalised or unnormalised) / covariate-adjusted | 19 / 26 / 23 or 26 / 24 days |
+| XGBoost-Cox vs penalised classical Cox (20 splits) | 0.857 vs 0.845, +0.0121, corrected p = 1.1×10⁻¹⁵ |
 | GCS complete case (n = 10,109) | C = 0.846, GCS still 6th |
-| Fine–Gray vs cause-specific | 0.818 vs 0.824 (no improvement) |
+| Subdistribution vs cause-specific | 0.818 vs 0.824 (no improvement) |
+| Landmark: still in PTA at admission (n = 12,280) | C = 0.793 [0.786, 0.800]; stay score 0.751 |
 
 ---
+
+---
+
+## Camera-ready additions
+
+The camera-ready paper keeps the submitted design and results. Additional numbers requested by the reviewers or
+corrected in a final audit (see `CHANGES.md`) are produced by two scripts, run from `code/` with `Form1.csv` present:
+
+```bash
+python camera_ready_checks.py          # -> camera_ready_checks.json (copy in results/); ~2 min
+python fig_diag_camera.py              # -> fig_diag.pdf (Fig. 2, values read from the JSON)
+python simulation_los_decomposition.py # -> ../results/simulation.json (ground-truth simulation; no data needed)
+```
+
+`camera_ready_checks.py` uses the same cleaning, features, seeds and models as the original scripts and adds:
+risk-quartile Kaplan-Meier (Sec. IV-D), the standard IPCW median, within-stratum concordance of the stay score (the
+control for the decile analysis), the likelihood-ratio test with a convergence check, the corrected resampled t-test,
+the landmark sensitivity analysis, and the coding checks.
 
 ## Data citation
 
