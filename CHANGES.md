@@ -1,4 +1,4 @@
-# Camera-ready changes (the submitted version is tagged `v1-submission`)
+# Camera-ready changes (the submitted version is commit [`b9bdaa6`](https://github.com/siam1234-Brand/TBIMS-MACHINE/tree/b9bdaa6b06e2ff74644c5a4ce701c14ecefba588), 16 September 2026)
 
 The submitted design, cohort and headline results are unchanged (C = 0.857, 0.793, increment 0.064).
 
